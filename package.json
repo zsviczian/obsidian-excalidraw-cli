@@ -10,6 +10,6 @@
   },
   "scripts": {
     "test": "node --test",
-    "check": "node --check scripts/native.mjs && node --check scripts/layout.mjs && node --check scripts/validate.mjs && node --check scripts/libraries.mjs && npm test"
+    "check": "node --check scripts/native.mjs && node --check scripts/doctor.mjs && node --check examples/first-drawing.mjs && node --check scripts/layout.mjs && node --check scripts/validate.mjs && node --check scripts/libraries.mjs && npm test"
   }
 }
