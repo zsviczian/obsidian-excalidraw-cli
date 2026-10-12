@@ -1,0 +1,22 @@
+{
+  "apiVersion": 1,
+  "requestId": "replace-with-a-unique-id",
+  "path": "Drawings/Agent Badge.excalidraw.md",
+  "elements": [
+    {
+      "id": "badge",
+      "type": "rectangle",
+      "x": 40,
+      "y": 40,
+      "width": 220,
+      "height": 96,
+      "backgroundColor": "#e7f5ff",
+      "label": {
+        "text": "Idea → impact",
+        "fontFamily": 5,
+        "fontSize": 24,
+        "textAlign": "center"
+      }
+    }
+  ]
+}

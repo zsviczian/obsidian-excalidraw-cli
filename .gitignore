@@ -1,0 +1,5 @@
+node_modules/
+coverage/
+.obsidian-excalidraw-cli/
+*.png
+*.svg
