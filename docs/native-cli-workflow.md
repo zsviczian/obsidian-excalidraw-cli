@@ -10,7 +10,7 @@ obsidian vault="My vault" obsidian-excalidraw-plugin:api surface=ea query=text
 obsidian vault="My vault" obsidian-excalidraw-plugin:api surface=lib
 ```
 
-The vault argument must precede the plugin command. The repo's `scripts/native.mjs` uses argument-array process execution (no shell), requires an explicit vault, creates a unique ID for writes, and checks the structured response. Set `OBSIDIAN_CLI` if the executable is not named `obsidian`; on Windows, use the supported console launcher such as `Obsidian.com` and test output decoding on that machine.
+The vault argument must precede the plugin command. The repo's `scripts/native.mjs` uses argument-array process execution (no shell), requires an explicit vault, discovers `help`/`status`/command schema/EA/Lib capabilities before each write, creates a unique ID for writes, and checks the structured response. Writes require an explicit private `stateDirectory`; it retains the effective request metadata and receipt (mode 0700 directory/0600 files where supported), rejects changed payloads reusing a request ID, and returns the record path. It may contain private drawing text/assets: keep it out of source control and sync. Pass the exact parsed request object with a vault-relative `requestFile` so it is retained; because the wrapper does not resolve vault names to machine paths, you must ensure it matches the file in the vault. The native plugin processes and records the actual file payload. Set `OBSIDIAN_CLI` if the executable is not named `obsidian`; on Windows, use the supported console launcher such as `Obsidian.com` and test output decoding on that machine.
 
 ## Small create request
 

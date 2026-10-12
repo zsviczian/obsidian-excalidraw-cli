@@ -1,4 +1,4 @@
-import { elementBounds, overlaps } from "./layout.mjs";
+import { elementBounds, groupBounds, overlaps } from "./layout.mjs";
 
 export function validateScene({
   elements,
@@ -63,5 +63,5 @@ export function validateScene({
       }
     }
   }
-  return { ok: diagnostics.length === 0, diagnostics, elementCount: visible.length };
+  return { ok: diagnostics.length === 0, diagnostics, elementCount: visible.length, groups: groupBounds(visible) };
 }

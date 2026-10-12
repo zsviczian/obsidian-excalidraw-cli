@@ -13,6 +13,15 @@
       "backgroundColor": "#f8f9fa"
     },
     {
+      "id": "connector",
+      "type": "arrow",
+      "x": 10,
+      "y": 90,
+      "width": 30,
+      "height": 0,
+      "end": { "id": "card" }
+    },
+    {
       "id": "card",
       "type": "rectangle",
       "x": 40,
@@ -21,15 +30,6 @@
       "height": 100,
       "backgroundColor": "#ffffff",
       "label": { "text": "Layered label" }
-    },
-    {
-      "id": "connector",
-      "type": "arrow",
-      "x": 10,
-      "y": 90,
-      "width": 30,
-      "height": 0,
-      "end": { "id": "card" }
     }
   ]
 }

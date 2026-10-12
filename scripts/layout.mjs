@@ -16,7 +16,7 @@ export function placeText({
   box,
   measure,
   wrap,
-  font = DEFAULT_HANDWRITTEN_FONT,
+  font = { name: DEFAULT_HANDWRITTEN_FONT },
   fontSize = 24,
   align = "left",
   padding = 0,
@@ -29,8 +29,11 @@ export function placeText({
   if (!["left", "center", "right"].includes(align)) throw new Error(`Unsupported text anchor: ${align}`);
   const maxWidth = box.width - padding * 2;
   if (maxWidth <= 0) throw new Error("Padding leaves no available text width");
-  const prepared = typeof wrap === "function" ? wrap(text, maxWidth, font, fontSize) : text;
-  const measured = measure(prepared, font, fontSize, lineHeight);
+  const fontName = typeof font === "string" ? font : font.name;
+  const fontId = typeof font === "object" ? font.id : undefined;
+  if (!fontName) throw new Error("A resolved font name is required");
+  const prepared = typeof wrap === "function" ? wrap(text, maxWidth, fontName, fontSize) : text;
+  const measured = measure(prepared, fontName, fontSize, lineHeight);
   if (!Number.isFinite(measured?.width) || !Number.isFinite(measured?.height)) {
     throw new Error("Runtime text measurement returned invalid dimensions");
   }
@@ -53,7 +56,8 @@ export function placeText({
     width: measured.width,
     height: measured.height,
     textAlign: align,
-    fontFamily: font,
+    fontFamily: fontId ?? fontName,
+    fontName,
     fontSize,
   };
 }
@@ -81,7 +85,11 @@ function bounds(points) {
 export function elementBounds(element) {
   if (!element || !Number.isFinite(element.x) || !Number.isFinite(element.y)) return null;
   if (Array.isArray(element.points) && element.points.length) {
-    return bounds(element.points.map(([x, y]) => ({ x: element.x + x, y: element.y + y })));
+    const points = element.points.map(([x, y]) => ({ x: element.x + x, y: element.y + y }));
+    if (!element.angle) return bounds(points);
+    const path = bounds(points);
+    const center = { x: path.x + path.width / 2, y: path.y + path.height / 2 };
+    return bounds(points.map((point) => rotate(point, center, element.angle)));
   }
   if (!Number.isFinite(element.width) || !Number.isFinite(element.height)) return null;
   const cx = element.x + element.width / 2;
@@ -93,6 +101,26 @@ export function elementBounds(element) {
     { x: element.x, y: element.y + element.height },
   ];
   return bounds(corners.map((point) => rotate(point, { x: cx, y: cy }, element.angle)));
+}
+
+export function groupBounds(elements = []) {
+  const groups = new Map();
+  for (const element of elements) {
+    const box = elementBounds(element);
+    if (!box) continue;
+    for (const groupId of element.groupIds ?? []) {
+      const entries = groups.get(groupId) ?? [];
+      entries.push({ id: element.id, bounds: box });
+      groups.set(groupId, entries);
+    }
+  }
+  return [...groups].map(([id, entries]) => {
+    const x = Math.min(...entries.map(({ bounds: box }) => box.x));
+    const y = Math.min(...entries.map(({ bounds: box }) => box.y));
+    const right = Math.max(...entries.map(({ bounds: box }) => box.x + box.width));
+    const bottom = Math.max(...entries.map(({ bounds: box }) => box.y + box.height));
+    return { id, elementIds: entries.map(({ id: elementId }) => elementId), bounds: { x, y, width: right - x, height: bottom - y } };
+  });
 }
 
 export function fitUniform(source, target) {
