@@ -114,7 +114,7 @@ function outcomeFor(command, response) {
     readBackRequired:
       response.persistence !== "saved" ||
       response.mutation === "unknown" ||
-      response.mutation === "none",
+      response.mutation === "not-applied",
   };
 }
 
@@ -154,7 +154,7 @@ export function buildArgs({ vault, command, request = {}, requestFile, executabl
   return { args, request: effective };
 }
 
-function parseResponse(stdout, stderr, exitCode) {
+function parseResponse(stdout, stderr, exitCode, command) {
   const text = stdout.trim();
   let response;
   try {
@@ -165,8 +165,10 @@ function parseResponse(stdout, stderr, exitCode) {
         `Inspect stdout/stderr; do not repeat an uncertain write blindly.\n${text}\n${stderr.trim()}`,
     );
   }
+  // A result lookup returns the original command, not necessarily "result".
   const pendingReceipt =
-    response?.command === "result" && response?.status === "pending" && response?.ok === null;
+    (command === "result" || WRITE_COMMANDS.has(command)) &&
+    response?.status === "pending" && response?.ok === null;
   if (response?.apiVersion !== 1 || (typeof response.ok !== "boolean" && !pendingReceipt)) {
     throw new Error("Unexpected native CLI response: expected apiVersion 1 and an ok boolean");
   }
@@ -233,7 +235,7 @@ export function invokeNative({
       );
       child.once("close", (code) => {
         void (async () => {
-          const response = parseResponse(stdout, stderr, code);
+          const response = parseResponse(stdout, stderr, code, command);
           if (writeRecordPath) {
             try {
               await saveRecord(stateDirectory, effectiveRequest, requestFile, response);
@@ -244,7 +246,7 @@ export function invokeNative({
               );
             }
           }
-          if (code !== 0 || !response.ok) {
+          if (code !== 0 || response.ok === false) {
             finish(
               new Error(
                 `Native command ${command} failed (exit ${code}, ok=${response.ok}, ` +
@@ -268,7 +270,7 @@ export async function discover({ vault, action = "create", ...options } = {}) {
     invokeNative({ vault, command: "help", ...options }),
     invokeNative({ vault, command: "status", ...options }),
     invokeNative({ vault, command: "schema", request: { action }, ...options }),
-    invokeNative({ vault, command: "api", request: { surface: "ea", query: "measureText bounds font group layer" }, ...options }),
+    invokeNative({ vault, command: "api", request: { surface: "ea", query: "text" }, ...options }),
     invokeNative({ vault, command: "api", request: { surface: "lib" }, ...options }),
   ]);
   return {
@@ -292,11 +294,16 @@ export async function readAll({ vault, path, source = "live", view, limit = 200,
     if (revision) request.revision = revision;
     const { response } = await invokeNative({ vault, command: "read", request, ...options });
     const data = response.data ?? {};
-    revision ??= data.revision ?? response.revision;
-    if (revision && (data.revision ?? response.revision) !== revision) {
+    const pageRevision = data.revision ?? response.revision;
+    if (typeof pageRevision !== "string" || !pageRevision || !Array.isArray(data.elements) ||
+        !Object.hasOwn(data, "nextOffset")) {
+      throw new Error("Incomplete native read page: expected revision, elements, and nextOffset");
+    }
+    revision ??= pageRevision;
+    if (pageRevision !== revision) {
       throw new Error("Read pagination changed revision; restart from offset zero");
     }
-    elements.push(...(data.elements ?? []));
+    elements.push(...data.elements);
     last = data.nextOffset;
     if (last == null) break;
     if (!Number.isInteger(last) || last <= offset) throw new Error("Invalid nextOffset in native read response");

@@ -1,67 +1,91 @@
-# obsidian-excalidraw-cli
+# Obsidian Excalidraw CLI agent kit
 
-A portable agent skill and small set of tested helpers for authoring editable Obsidian Excalidraw drawings through the plugin's **native CLI**. It does not implement a drawing engine, duplicate the native schema, install an alternate CLI, or modify agent configuration automatically.
+Give an agent this repository and a drawing task. It contains the skill, runnable examples, small Node helpers, and supporting context needed to discover and control **Obsidian Excalidraw through the Obsidian CLI**.
 
-## Requirements and support
+```text
+Agent → local terminal → Obsidian CLI → Excalidraw plugin → editable vault drawing
+```
 
-- Obsidian desktop with the Excalidraw plugin enabled and its native CLI available. The plugin source documents native registration on supported desktop Obsidian CLI hosts (API 1.12.2+); the running host's `help`, `status`, `schema`, and `api` responses are authoritative.
-- Node.js 20 or newer for offline utilities/tests; no npm runtime dependencies or global install are required. Node.js 22 on Linux is the only environment tested in this checkout. Windows/PowerShell is a target environment, not verified here; use Obsidian's supported console launcher (often `Obsidian.com`) and validate Unicode/quoting locally. macOS has not been tested.
-- An explicit vault name/ID and exact drawing path for each operation. Never rely on an active drawing.
+It is not another Excalidraw CLI, renderer, cloud service, or scene serializer. The installed plugin owns drawing construction, revision checks, persistence, and exports.
 
-The case-study environment described by the original task (Windows, Obsidian, plugin 2.28.1, vault `sandbox`) is not this execution environment. Do not hardcode those values.
+## Give it to an agent
 
-## Setup and checks
+Provide a local checkout or a copy of the repository, then use this handoff, replacing the placeholders:
+
+```text
+Read AGENTS.md and SKILL.md in <absolute path to this repository>.
+Use the Obsidian CLI to work in vault <exact vault name or ID>.
+Task: <what to create, inspect, or change>.
+Drawing: <exact vault-relative path, including extension>.
+Preview: <exact vault-relative .png or .svg output path, when needed>.
+Private state directory: <absolute local path outside source control, dedicated to this vault>.
+Start with read-only discovery. Stay within the task's authorized changes.
+Verify saved state and inspect the exported image; report what remains unverified.
+```
+
+For an agent that supports `SKILL.md` bundles, place a copy in its documented skill location **with the repository's relative structure intact**, including `docs/`, `scripts/`, `examples/`, `README.md`, and `LICENSE`. Keep `package.json` and `tests/` for offline checks. Do not copy only SKILL.md, `.git`, or any private generated state. Installation is manual; nothing changes global agent settings. Scripts resolve imports relative to their files, not the current working directory.
+
+## Requirements
+
+Use a terminal on the computer running Obsidian, with permission to invoke its CLI. A cloud/container agent without access to that app cannot control it merely by receiving this repository.
+
+Enable **Settings → General → Command line interface** and the Excalidraw plugin. Use a plugin build containing the native CLI from [plugin PR #2988](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/2988); a merged PR does not establish which release is installed. The native registration gate is desktop Obsidian API 1.12.2+ with the handler method present. The [Obsidian CLI setup guide](https://help.obsidian.md/cli) separately documents the required desktop installer. Check the running `help`/`status`, not a guessed version number.
+
+Node.js 20+ is required only for this repository's helpers and tests. There are no npm dependencies, API keys, or global package installs. On Windows, use the supported `Obsidian.com` console launcher when capturing output; `--executable` accepts its exact path. On other systems, use the registered `obsidian` executable. `OBSIDIAN_CLI` is the optional executable override for the Node helpers.
+
+## Discover first — no drawing changes
+
+From the repository root:
+
+```sh
+node scripts/doctor.mjs --vault "My vault"
+```
+
+This queries native help, status, the create schema, and EA/Lib references. It prints JSON and exits unsuccessfully if readiness or the discovery session is inconsistent. It does not install anything, open drawings, or change settings. To discover directly without Node:
+
+```sh
+obsidian vault="My vault" obsidian-excalidraw-plugin:help
+obsidian vault="My vault" obsidian-excalidraw-plugin:status
+obsidian vault="My vault" obsidian-excalidraw-plugin:schema action=create
+```
+
+## First drawing
+
+Preview the integration example without contacting Obsidian:
+
+```sh
+node examples/first-drawing.mjs --vault "My vault" --path "Demo.excalidraw.md" --out "Demo.png"
+```
+
+After reviewing the plan, run it in an authorized test vault with unused output paths:
+
+```sh
+node examples/first-drawing.mjs --vault "My vault" --path "Demo.excalidraw.md" --out "Demo.png" --execute --state-directory "/absolute/private-state/my-vault"
+```
+
+Replace the private-state path with an absolute local directory you own; Windows examples are in [getting started](docs/getting-started.md). The demo creates two labelled shapes and a bound arrow, reads saved content, explicitly opens the drawing, edits an actual element ID at its live revision, verifies the saved edit, and exports that same disk revision. It uses the installed default font to test the transport, not a particular typography choice. Inspect the PNG yourself or through the agent's image-viewing capability.
+
+The script does not overwrite, retry, delete, or run a trusted EA script. Opening a view can run configured drawing scripts. If any stage fails, keep the partial result, recover its receipt, and inspect the target before issuing another write. Requests and receipts are retained in the private state directory; they can contain drawing text.
+
+## Reference map
+
+| Need | Start here |
+| --- | --- |
+| First-time setup, path types, command discovery, and source provenance | [Getting started](docs/getting-started.md) |
+| Agent operating rules | [SKILL.md](SKILL.md) |
+| Requests, revisions, pagination, persistence, and recovery | [Native workflow](docs/native-cli-workflow.md), `scripts/native.mjs` |
+| Text placement, bounds, validation, and layering | [Authoring](docs/authoring.md), `scripts/layout.mjs`, `scripts/validate.mjs` |
+| Public symbols, structured library inspection, and provenance | [Library reuse](docs/library-reuse.md), `examples/inspect-library.mjs` |
+| Repository development and live acceptance | [Contributing](CONTRIBUTING.md) |
+
+The initial [capability inspection](docs/capabilities.md) and [test report](docs/results.md) are historical records. Offline tests do not establish font availability, visual fidelity, lossless library insertion, or live platform support. The upstream [Excalidraw CLI](https://github.com/excalidraw/cli) is a separate Excalidraw+ client/local renderer and is not required or invoked here.
+
+## Check the bundle
 
 ```sh
 npm run check
 ```
 
-This runs Node syntax checks and the dependency-free offline tests. There is no install step. Live integration requires a running Obsidian app and an isolated, dedicated test vault; no live tests were run here. See [the result report](docs/results.md).
+This runs syntax checks and dependency-free offline tests, including subprocess fixtures. It never launches Obsidian or edits a vault. Live integration and visual acceptance remain separate checks.
 
-## Quickstart
-
-1. Start Obsidian, enable its CLI and the Excalidraw plugin, then query the installed contract. Replace the vault value with your exact vault name or ID:
-
-   ```powershell
-   obsidian vault="My vault" obsidian-excalidraw-plugin:help
-   obsidian vault="My vault" obsidian-excalidraw-plugin:status
-   obsidian vault="My vault" obsidian-excalidraw-plugin:schema action=create
-   ```
-
-2. Copy `examples/badge.request.json` into a visible file such as `CLI/badge.json` in that vault. Replace the destination with an unused exact path and give the write a unique request ID. The sample uses font ID `5`, which the case-study identifies as the expected Excalifont ID; confirm the mapping in the running plugin before using it. If that mapping is unavailable, resolve Excalifont by name through a supported runtime helper. Never silently use Virgil.
-3. Create, open, read, and export explicitly:
-
-   ```powershell
-   obsidian vault="My vault" obsidian-excalidraw-plugin:create input="CLI/badge.json"
-   obsidian vault="My vault" obsidian-excalidraw-plugin:open path="Drawings/Agent Badge.excalidraw.md"
-   obsidian vault="My vault" obsidian-excalidraw-plugin:read path="Drawings/Agent Badge.excalidraw.md" source=live detail=elements
-   obsidian vault="My vault" obsidian-excalidraw-plugin:export path="Drawings/Agent Badge.excalidraw.md" source=live out="Drawings/Agent Badge.png" requestId=badge-export-unique-1
-   ```
-
-   Inspect the exported image at full size. Check the returned `ok`, `mutation`, and `persistence`; a successful process exit or export is not proof of a saved, visually sound drawing. `create` never overwrites: use a new path for another run.
-
-See [native workflow](docs/native-cli-workflow.md), [authoring helpers](docs/authoring.md), and [library reuse](docs/library-reuse.md) for the rest of the contract. `scripts/native.mjs` exports safe process invocation, pre-write runtime discovery, paginated reads, and recovery helpers. Native writes through the wrapper require an explicit private state directory so requests and receipts can be recovered after lost output; state files may contain private drawing content. The layout helpers accept injected Excalidraw measurements and do not claim to reproduce the runtime's renderer.
-
-## Portable skill
-
-`SKILL.md` is a portable instruction file. Copy it manually to the compatible agent's normal skills directory. For GitHub Copilot repository discovery, a user can install it as `.github/skills/obsidian-excalidraw-cli/SKILL.md` in their own project; for other compatible agents, use that agent's documented skill directory. This repository does not change global settings or install it into a user's workspace.
-
-## Examples and library policy
-
-- `examples/badge.request.json`: editable text badge request.
-- `examples/layers.request.json`: background/connector/content ordering example.
-- `examples/inspect-library.mjs`: inspect and select one public library item without evaluating its data. It does **not** insert that item into a scene; the supported lossless native/EA import path is not runtime-verified in this environment. Do not flatten the selection into create skeletons and claim groups/bindings were preserved.
-
-Run the inspector against a downloaded `.excalidrawlib` and a zero-based item index:
-
-```sh
-node examples/inspect-library.mjs /path/to/selected-library.excalidrawlib 0
-```
-
-Search public catalog metadata/previews first. Record the exact selected source, author, revision/hash, and applicable attribution/license. The catalog repository's MIT license is not blanket proof that every asset can be reused without its own review. Follow the catalog's guidance to group multi-element items.
-
-## Scope and limitations
-
-This first version implements the portable agent workflow, a native subprocess wrapper, text placement/bounds utilities, and structured library inspection. It does not maintain a copied plugin schema, invoke the official Excalidraw CLI, render outside Obsidian, or promise visual fidelity. Runtime-dependent library insertion, font mapping, text anchors, export appearance, and view lifecycle remain unverified; documented candidate upstream gaps are separated in [capabilities](docs/capabilities.md).
-
-The checkout's existing `LICENSE` is GNU AGPLv3, despite the task description's statement that the repository advertises MIT. This implementation does not replace that license. The package metadata matches the checked-in license.
+License: [GNU AGPLv3](LICENSE), preserved from this repository's original license.
