@@ -1,0 +1,15 @@
+{
+  "name": "obsidian-excalidraw-cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Portable helpers for authoring Obsidian Excalidraw drawings through the native CLI",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "node --test",
+    "check": "node --check scripts/native.mjs && node --check scripts/layout.mjs && node --check scripts/validate.mjs && node --check scripts/libraries.mjs && npm test"
+  }
+}

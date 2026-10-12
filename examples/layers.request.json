@@ -1,0 +1,35 @@
+{
+  "apiVersion": 1,
+  "requestId": "replace-with-a-unique-id",
+  "path": "Drawings/Agent Layers.excalidraw.md",
+  "elements": [
+    {
+      "id": "background",
+      "type": "rectangle",
+      "x": 0,
+      "y": 0,
+      "width": 320,
+      "height": 180,
+      "backgroundColor": "#f8f9fa"
+    },
+    {
+      "id": "connector",
+      "type": "arrow",
+      "x": 10,
+      "y": 90,
+      "width": 30,
+      "height": 0,
+      "end": { "id": "card" }
+    },
+    {
+      "id": "card",
+      "type": "rectangle",
+      "x": 40,
+      "y": 40,
+      "width": 240,
+      "height": 100,
+      "backgroundColor": "#ffffff",
+      "label": { "text": "Layered label" }
+    }
+  ]
+}
