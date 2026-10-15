@@ -29,7 +29,7 @@ For an agent that supports `SKILL.md` bundles, place a copy in its documented sk
 
 Use a terminal on the computer running Obsidian, with permission to invoke its CLI. A cloud/container agent without access to that app cannot control it merely by receiving this repository.
 
-Enable **Settings → General → Command line interface** and the Excalidraw plugin. Use a plugin build containing the native CLI from [plugin PR #2988](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/2988); a merged PR does not establish which release is installed. The native registration gate is desktop Obsidian API 1.12.2+ with the handler method present. The [Obsidian CLI setup guide](https://help.obsidian.md/cli) separately documents the required desktop installer. Check the running `help`/`status`, not a guessed version number.
+Enable **Settings → General → Command line interface** and the Excalidraw plugin. Require **Obsidian Excalidraw plugin 2.29.1 or higher**. Verify the running `status.data.version` (or the doctor's `pluginVersion`) before drawing operations; stop on older or unverified versions and ask the user to update/reload the plugin. A source checkout or merged PR does not establish which release is installed. The native registration gate is desktop Obsidian API 1.12.2+ with the handler method present. The [Obsidian CLI setup guide](https://help.obsidian.md/cli) separately documents the required desktop installer. Check the running `help`/`status`, not a guessed version number.
 
 Node.js 20+ is required only for this repository's helpers and tests. There are no npm dependencies, API keys, or global package installs. On Windows, use the supported `Obsidian.com` console launcher when capturing output; `--executable` accepts its exact path. On other systems, use the registered `obsidian` executable. `OBSIDIAN_CLI` is the optional executable override for the Node helpers.
 
@@ -41,7 +41,7 @@ From the repository root:
 node scripts/doctor.mjs --vault "My vault"
 ```
 
-This queries native help, status, the create schema, and EA/Lib references. It prints JSON and exits unsuccessfully if readiness or the discovery session is inconsistent. It does not install anything, open drawings, or change settings. To discover directly without Node:
+This queries native help, status, the create schema, and EA/Lib references. It prints JSON and exits unsuccessfully if readiness or the discovery session is inconsistent. Its `ready` flag does not check the minimum plugin version: separately verify `pluginVersion` is 2.29.1 or higher. It does not install anything, open drawings, or change settings. To discover directly without Node:
 
 ```sh
 obsidian vault="My vault" obsidian-excalidraw-plugin:help
@@ -74,6 +74,7 @@ The script does not overwrite, retry, delete, or run a trusted EA script. Openin
 | First-time setup, path types, command discovery, and source provenance | [Getting started](docs/getting-started.md) |
 | Agent operating rules | [SKILL.md](SKILL.md) |
 | Requests, revisions, pagination, persistence, and recovery | [Native workflow](docs/native-cli-workflow.md), `scripts/native.mjs` |
+| Image inventory, mixed previews, labels, and output budgets | [Image previews](docs/image-previews.md) |
 | Text placement, bounds, validation, and layering | [Authoring](docs/authoring.md), `scripts/layout.mjs`, `scripts/validate.mjs` |
 | Public symbols, structured library inspection, and provenance | [Library reuse](docs/library-reuse.md), `examples/inspect-library.mjs` |
 | Repository development and live acceptance | [Contributing](CONTRIBUTING.md) |

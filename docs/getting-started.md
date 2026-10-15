@@ -6,7 +6,7 @@ Use this guide with [SKILL.md](../SKILL.md). It assumes no earlier conversation,
 
 The agent needs a terminal on the computer running Obsidian and permission to invoke its executable. Merely providing the repository to a cloud agent does not connect it to the desktop. Do not open network access or forward ports as an automatic workaround.
 
-The [official Obsidian CLI guide](https://help.obsidian.md/cli) explains installer setup, CLI registration, and platform launchers. Enable **Settings → General → Command line interface**, register the launcher, and restart the terminal when PATH changes. The desktop app must be available. The plugin's native commands additionally require an enabled build containing [PR #2988](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/2988), desktop API 1.12.2+, and the registration method. Installer requirements and plugin API gating are separate checks. Do not assume the latest installed store release contains a particular merged PR.
+The [official Obsidian CLI guide](https://help.obsidian.md/cli) explains installer setup, CLI registration, and platform launchers. Enable **Settings → General → Command line interface**, register the launcher, and restart the terminal when PATH changes. The desktop app must be available. This bundle requires **Obsidian Excalidraw plugin 2.29.1 or higher**, desktop API 1.12.2+, and the native registration method. Older plugin versions may expose CLI commands but lack the image-preview contract and fixes used here. Installer requirements and plugin API gating are separate checks. Do not assume the latest installed store release contains a particular merged PR.
 
 On Windows, use `Obsidian.com` for captured console output, not the GUI executable. The helpers accept `--executable "C:\path\to\Obsidian.com"`; on macOS/Linux, use the registered `obsidian` binary or its exact path. They use argument arrays without a shell. `OBSIDIAN_CLI` overrides the default executable; it is a path/name, not a shell command containing extra arguments.
 
@@ -31,7 +31,7 @@ Run from the bundle root, or use the scripts' absolute paths:
 node scripts/doctor.mjs --vault "My vault"
 ```
 
-The doctor issues only `help`, `status`, `schema`, and `api` queries. Its JSON includes the installed plugin version, returned vault, session, schema, and API references. `ready: true` requires native CLI/converter readiness, the expected workflow commands, and one consistent plugin session. Confirm the returned vault against the intended target. An unsuccessful doctor does not change settings or attempt a repair.
+The doctor issues only `help`, `status`, `schema`, and `api` queries. Its JSON includes the installed plugin version, returned vault, session, schema, and API references. `ready: true` requires native CLI/converter readiness, the expected workflow commands, and one consistent plugin session. Confirm the returned vault against the intended target. Separately require `pluginVersion` / `status.data.version` to be **2.29.1 or higher**: the doctor does not enforce a minimum plugin version. If older, missing, or unverified, stop before drawing operations and ask the user to update/reload Excalidraw, then repeat discovery. Version alone does not replace querying the installed schemas. An unsuccessful doctor does not change settings or attempt a repair.
 
 The equivalent discovery commands are:
 
@@ -85,7 +85,7 @@ Opening can run configured drawing scripts. The demo does not use the trusted `s
 
 Use [native workflow](native-cli-workflow.md) for complete reads and guarded edits. Its `invokeNative`, `readAll`, `listWriteRecords`, and `recoverWrite` helpers are importable building blocks; they are not a separate drawing protocol. Large requests should use `input=<visible vault JSON file>` with the exact matching payload retained locally. The wrapper caps inline structured requests at 8 KiB; the plugin's native input limit is 2 MiB at the inspected baseline. Query the current schema rather than increasing limits blindly.
 
-Use [authoring](authoring.md) for text and layout. Measurements come from the installed runtime when available; the offline utilities do not replace the renderer. Use [library reuse](library-reuse.md) for public symbols. Do not feed a complete library item to `create` as if it were a skeleton batch.
+For image-heavy scenes, use [image previews](image-previews.md) to inventory assets and request bounded mixed-fidelity previews without modifying the drawing. Use [authoring](authoring.md) for text and layout. Measurements come from the installed runtime when available; the offline utilities do not replace the renderer. Use [library reuse](library-reuse.md) for public symbols. Do not feed a complete library item to `create` as if it were a skeleton batch.
 
 For an EA-only capability, inspect its signature with `api`, review a local script, and obtain explicit authorization before `script trusted=true`. Pass data through JSON `args` / `utils.input`, await writes, and read back. A trusted script is neither sandboxed nor transactional. Do not install the Excalidraw+ CLI or use arbitrary `eval` as an automatic fallback.
 
@@ -104,12 +104,13 @@ If no completed receipt is available, inspect both saved and relevant live state
 
 ## Source provenance and boundaries
 
-Reviewed on **2026-10-12**. These sources explain the workflow; installed responses remain authoritative.
+Core workflow reviewed on **2026-10-12**; image-preview workflow updated on **2026-10-15** against plugin commit `abf35c06de48bc5bcb0e1c93a6dec7f3eaf1c9fc` (PR #3005). Require the running plugin version **2.29.1 or higher** and its relevant schemas; this source checkpoint is not proof of an installed release. These sources explain the workflow; installed responses remain authoritative.
 
 | Input | Reused here | Boundary |
 | --- | --- | --- |
 | [Plugin CLI reference at merged PR #2988](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/3cef89dcdadf6c80171a23ebb1036f77ea7656c1/docs/CLI.md) | Native commands, exact paths, revision/save/receipt model | A merge is not an installed-version guarantee. |
 | [Plugin dispatcher](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/3cef89dcdadf6c80171a23ebb1036f77ea7656c1/src/core/managers/ExcalidrawCLI.ts) and [command registry](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/3cef89dcdadf6c80171a23ebb1036f77ea7656c1/src/core/cli/cliCommands.ts) | Readiness fields, substring API search, `viewId`, pagination, original-command receipt envelopes | Source-derived contract, not live validation of this companion. |
+| [Image-preview CLI reference](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/abf35c06de48bc5bcb0e1c93a6dec7f3eaf1c9fc/docs/CLI.md) and [command registry](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/abf35c06de48bc5bcb0e1c93a6dec7f3eaf1c9fc/src/core/cli/cliCommands.ts) | Image inventory/metadata, image policies, preview budgets and receipt fixes | Requires plugin 2.29.1+; source inspection does not establish release availability or live validation of this bundle. |
 | [Public library catalog](https://github.com/excalidraw/excalidraw-libraries/blob/297a349eaff859e678f78d4dbc8e68df5fce42e5/README.md) | Symbol discovery and grouping guidance | Structured data and previews, not executable scripts or proof of an insertion API. |
 | [Upstream Excalidraw CLI](https://github.com/excalidraw/cli/blob/55fe7f494837078781a062c4d3faf29c159ebec5/README.md) | JSON-first automation, explicit outputs, partial-failure reporting | Separate Excalidraw+ client/local renderer; no commands, credentials, or renderer imported. |
 

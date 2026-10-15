@@ -1,6 +1,6 @@
 # Native CLI workflow
 
-The Obsidian plugin is the authority for command schemas and persistence. Start from the running app, not assumptions about a repository version:
+Require **Obsidian Excalidraw plugin 2.29.1 or higher**, verified through the running `status.data.version` / doctor's `pluginVersion`. Stop on older or unverified versions; the doctor's `ready` flag alone does not enforce this requirement. The Obsidian plugin is the authority for command schemas and persistence. Start from the running app, not assumptions about a repository version:
 
 ```text
 obsidian vault="My vault" obsidian-excalidraw-plugin:help
@@ -31,8 +31,12 @@ For edits, `read source=live detail=elements` and retain `data.revision`, then `
 
 - Keep the request payload and request ID. Repeating the same effective write can return its receipt; changed content must use a fresh request ID.
 - `result requestId=<id>` recovers a receipt after lost stdout. Receipts are session scoped and may expire. Read the exact target back before retrying if the receipt is unknown or pending.
-- Refresh on `STALE_REVISION`. On `BUSY`, read back before retrying. Do not automatically retry either as though it were a transient network error.
+- Refresh on `STALE_REVISION`. On `BUSY`, inspect the receipt/state first. An explicitly pre-execution refusal with no mutation or persistence side effect can retry the identical payload with the same request ID once the target is free. Do not assign a fresh ID to bypass pending/completed/uncertain receipts or automatically retry writes. Unexpected `INTERNAL_ERROR` is distinct from invalid input; inspect possible write outcomes before proceeding.
 - Creation is not evidence of an open view. Export does not save live state. A trusted script is not transactional; inspect live/disk state on error.
+
+## Image previews
+
+Use [image previews](image-previews.md) for `read detail=images`, guarded labels/tags, explicit original/thumbnail/placeholder policies, output budgets, and source-versus-preview identity. `apply` image insertion uses boolean `scale`; PNG export uses numeric `scale`. Inspect the matching operation schema. The existing `readAll` helper reads element pages only; image inventory must follow its own `images`/`nextOffset` pages at one revision.
 
 ## Pagination and machine-readable results
 
