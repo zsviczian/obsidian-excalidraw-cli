@@ -1,5 +1,11 @@
 # Text, shapes, and layout
 
+Use [native Lucide icons](lucide-icons.md) for installed editable symbols. Choose
+nominal viewport size and initial line width explicitly, retain returned group
+members, and inspect their actual painted bounds before connecting nearby shapes.
+Read [Mermaid output types](mermaid.md) before promising editable diagram nodes;
+read [SVG import limits](svg-import.md) before converting an image to geometry.
+
 `scripts/layout.mjs` is a small host-neutral placement/checking layer. It deliberately takes injected measurement and wrapping functions: use the runtime's installed Excalidraw helpers when available rather than copying font metrics or approximating glyph widths.
 
 ```js
