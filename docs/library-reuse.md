@@ -2,6 +2,9 @@
 
 Use libraries for complex reusable symbols, not for a rectangle or arrow that native skeletons can express clearly. This workflow inspects structured items; it does not claim an unverified lossless insertion path.
 
+For a symbol supplied as SVG, use [editable SVG import](svg-import.md). Converting
+an SVG does not preserve a structured library item's bindings, labels, or assets.
+
 ## Find and inspect one item
 
 Search [libraries.excalidraw.com](https://libraries.excalidraw.com/) or the [public catalog](https://github.com/excalidraw/excalidraw-libraries) with generic semantic terms and aliases. Do not send private vault contents to a public search service. Compare previews for a coherent visual style, then inspect the matching catalog metadata rather than guessing a raw asset URL. The catalog's `libraries.json` and `authors.json` provide discovery/provenance context; download the chosen `.excalidrawlib` from its recorded source and pin the repository revision.

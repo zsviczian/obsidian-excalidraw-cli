@@ -1,0 +1,11 @@
+{
+  "apiVersion": 1,
+  "command": "create",
+  "requestId": "replace-with-a-unique-lucide-request-id",
+  "path": "Drawings/Lucide icons.excalidraw.md",
+  "elements": [],
+  "icons": [
+    { "id": "database-icon", "icon": "lucide-database", "x": 0, "y": 0, "size": 96, "strokeColor": "#1e1e1e", "roughness": 1, "opacity": 100 },
+    { "id": "dot-icon", "icon": "lucide-dot", "x": 160, "y": 0, "size": 48, "strokeWidth": 3, "strokeColor": "#1971c2", "roughness": 0, "opacity": 100 }
+  ]
+}

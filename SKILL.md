@@ -42,6 +42,9 @@ For a first authorized test, inspect the offline plan from `examples/first-drawi
 - Inspect only: use `list` or `read source=disk` without opening or saving. A summary or first page is not a complete inventory.
 - Preview: export to an explicit `.svg`/`.png` path; replacing an existing output requires separate explicit permission. Live export does not save a drawing. Prefer disk export when verifying persisted content. For image-heavy drawings, read [image previews](docs/image-previews.md): inventory images → bounded structural/mixed overview → selected original detail. Full original fidelity remains the default; request any reduction explicitly.
 - Advanced work: inspect the installed EA/Lib references first. Use `script` only for reviewed local code the user authorizes, with `trusted=true`. Pass JSON arguments as `utils.input`; never interpolate untrusted text into source.
+- Editable SVGs and icons: read [SVG import](docs/svg-import.md) for the workbench-only `importSVG` contract, explicit grouping/insertion, and fidelity limits. Use the installed converter through a trusted script; discover its API before use.
+- Lucide icons: read [native icon insertion](docs/lucide-icons.md). Discover installed names with `icons`; use `create.icons` or `apply` with `op: "lucide"`. Ordinary insertion needs no trusted script. Read every returned `groupMap` member ID; icon aliases are not single elements or binding targets.
+- Mermaid diagrams: read [native diagrams versus SVG images](docs/mermaid.md) before promising editable nodes or labels. Other diagram kinds may render as an SVG image; SVG-to-native conversion is a separate, lossy geometry operation.
 
 ## Preserve meaning and editability
 

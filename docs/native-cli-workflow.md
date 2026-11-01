@@ -34,6 +34,12 @@ For edits, `read source=live detail=elements` and retain `data.revision`, then `
 - Refresh on `STALE_REVISION`. On `BUSY`, inspect the receipt/state first. An explicitly pre-execution refusal with no mutation or persistence side effect can retry the identical payload with the same request ID once the target is free. Do not assign a fresh ID to bypass pending/completed/uncertain receipts or automatically retry writes. Unexpected `INTERNAL_ERROR` is distinct from invalid input; inspect possible write outcomes before proceeding.
 - Creation is not evidence of an open view. Export does not save live state. A trusted script is not transactional; inspect live/disk state on error.
 
+## Native icons
+
+For installed editable icons, use [native Lucide discovery and insertion](lucide-icons.md).
+It uses ordinary guarded `create`/`apply` requests and one-to-many `groupMap`
+handles; it does not require trusted scripts or an image insertion workaround.
+
 ## Image previews
 
 Use [image previews](image-previews.md) for `read detail=images`, guarded labels/tags, explicit original/thumbnail/placeholder policies, output budgets, and source-versus-preview identity. `apply` image insertion uses boolean `scale`; PNG export uses numeric `scale`. Inspect the matching operation schema. The existing `readAll` helper reads element pages only; image inventory must follow its own `images`/`nextOffset` pages at one revision.

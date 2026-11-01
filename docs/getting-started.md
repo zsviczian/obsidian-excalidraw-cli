@@ -104,7 +104,20 @@ If no completed receipt is available, inspect both saved and relevant live state
 
 ## Source provenance and boundaries
 
-Core workflow reviewed on **2026-10-12**; image-preview workflow updated on **2026-10-15** against plugin commit `abf35c06de48bc5bcb0e1c93a6dec7f3eaf1c9fc` (PR #3005). Require the running plugin version **2.29.1 or higher** and its relevant schemas; this source checkpoint is not proof of an installed release. These sources explain the workflow; installed responses remain authoritative.
+Mermaid output types, native-versus-SVG stroke scaling and SVG paint fallback
+guidance were reviewed on **2026-10-31**. See [Mermaid](mermaid.md),
+[Lucide icons](lucide-icons.md) and [SVG import](svg-import.md). The paint fallback
+is [pending plugin PR #3027](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3027);
+installed responses/build behavior remain authoritative.
+
+Lucide guidance was updated on **2026-10-27** for the local implementation of
+[plugin PR #3019](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3019)
+and its paired component branch. This is staged next-release guidance: verify
+the installed `icons` command, create/apply schemas and EA method before use.
+The source checkout and general version/readiness checks do not establish that
+the new native capability is installed.
+
+Core workflow reviewed on **2026-10-12**; image-preview workflow updated on **2026-10-15** against plugin commit `abf35c06de48bc5bcb0e1c93a6dec7f3eaf1c9fc` (PR #3005). [SVG import](svg-import.md) guidance reviewed on **2026-10-27** against plugin commit `9e52063296ffcd3b38d6a2bd5b23546d7e6268f7`, including merged PR #3018. Require the running plugin version **2.29.1 or higher** and its relevant schemas; these source checkpoints are not proof of an installed release. These sources explain the workflow; installed responses remain authoritative.
 
 | Input | Reused here | Boundary |
 | --- | --- | --- |
@@ -112,6 +125,7 @@ Core workflow reviewed on **2026-10-12**; image-preview workflow updated on **20
 | [Plugin dispatcher](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/3cef89dcdadf6c80171a23ebb1036f77ea7656c1/src/core/managers/ExcalidrawCLI.ts) and [command registry](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/3cef89dcdadf6c80171a23ebb1036f77ea7656c1/src/core/cli/cliCommands.ts) | Readiness fields, substring API search, `viewId`, pagination, original-command receipt envelopes | Source-derived contract, not live validation of this companion. |
 | [Image-preview CLI reference](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/abf35c06de48bc5bcb0e1c93a6dec7f3eaf1c9fc/docs/CLI.md) and [command registry](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/abf35c06de48bc5bcb0e1c93a6dec7f3eaf1c9fc/src/core/cli/cliCommands.ts) | Image inventory/metadata, image policies, preview budgets and receipt fixes | Requires plugin 2.29.1+; source inspection does not establish release availability or live validation of this bundle. |
 | [Public library catalog](https://github.com/excalidraw/excalidraw-libraries/blob/297a349eaff859e678f78d4dbc8e68df5fce42e5/README.md) | Symbol discovery and grouping guidance | Structured data and previews, not executable scripts or proof of an insertion API. |
+| [SVG converter contract](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/9e52063296ffcd3b38d6a2bd5b23546d7e6268f7/src/shared/svgToExcalidraw/readme.md) and [EA implementation](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/9e52063296ffcd3b38d6a2bd5b23546d7e6268f7/src/shared/ExcalidrawAutomate.ts) | Workbench-only SVG conversion, grouping/insertion responsibilities and fidelity limits | Source inspection only for this bundle; requires the installed API and explicit trusted-script authorization. |
 | [Upstream Excalidraw CLI](https://github.com/excalidraw/cli/blob/55fe7f494837078781a062c4d3faf29c159ebec5/README.md) | JSON-first automation, explicit outputs, partial-failure reporting | Separate Excalidraw+ client/local renderer; no commands, credentials, or renderer imported. |
 
 The repository's initial [capability report](capabilities.md) and [results](results.md) retain earlier inspection context. Do not mistake their original case-study environment for your runtime. Offline tests use subprocess fixtures; live platform and visual checks require the actual desktop app.
