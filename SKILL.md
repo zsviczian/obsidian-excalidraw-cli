@@ -50,7 +50,7 @@ For a first authorized test, inspect the offline plan from `examples/first-drawi
 
 Inventory the complete source scene: text, relationships, symbols, palette, regions, and dimensions. For reference recreation, compare the source image rather than inventing hidden details. Follow `nextOffset` until exhausted, with the same revision; restart on a changed snapshot.
 
-For freehand drawings and traced outlines, keep each continuous contour in one line element and simplify its control points. Before publication, review adjacent paths for concatenation using [continuous contours](docs/authoring.md#continuous-contours).
+For freehand drawings and traced outlines, keep each continuous contour in one line element and simplify its control points. Before publication, audit all open outline endpoints for concatenation, including bends, cusps, small gaps and overlapping ends; repeat the audit on the remaining paths using [continuous contours](docs/authoring.md#continuous-contours).
 
 Use returned `data.idMap` IDs, not skeleton-local labels, for later edits. A generated bound label has its own text-element ID. Keep small requests in structured JSON; put larger ones in a visible vault-relative JSON file. Never edit compressed drawing Markdown directly. Retain the exact request payload and unique request ID before publication.
 

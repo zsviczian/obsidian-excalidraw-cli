@@ -41,16 +41,37 @@ preserving its shape. Sparse points are especially useful at roughness 2; splitt
 the contour into several elements introduces new stroke ends and restarts the
 roughness pattern. A corner can remain a point within the same element.
 
-Before publication, inspect adjacent, same-style paths that meet end to end and
-continue smoothly. Endpoints within about one stroke width are a useful review
-cue, not sufficient evidence to merge. Confirm that the paths describe the same
-contour and have compatible group, frame, and stacking context.
+Before publication, audit the endpoints of every open outline in each region,
+including paths rejected by any automatic merge filter. Compare endpoints in
+scene coordinates, in both point orders. Exact matches, small gaps, and short
+overlaps are review candidates; use stroke width and the reference ink to judge
+whether they belong together. A radius is a discovery aid, not a hard acceptance
+or rejection boundary.
+
+Do not require nearly parallel endpoint tangents. One contour can bend around an
+elbow or cheek, turn a corner, or reverse sharply at a hair or feather tip. A
+change in direction does not justify splitting an otherwise uninterrupted outline.
+Trace the whole visible boundary through the junction before deciding. When
+several endpoints meet, choose any eligible
+continuation within that junction instead of rejecting every path as ambiguous;
+keep the actual branch separate.
+
+Review candidates against the source and neighboring marks, and confirm compatible
+style, group, frame, and stacking context. A difference in roundness requires
+checking how to retain the corner and curve in one path; it does not establish
+that they are separate contours. For overlaps, trim the duplicated run before
+concatenating rather than doubling back over it.
 
 Concatenate eligible paths in scene coordinates, accounting for element position,
 rotation, and point order. Reconcile small gaps or overlaps, remove redundant join
 points, and simplify the combined path. Preserve its intended shape, style, group,
-frame, and layering. Inspect the native render for cusps, doubled joins, and
-accidental closures.
+frame, and layering. Avoid packing nearly coincident corner-support points next
+to long spans: uneven spacing can create spline loops or protrusions. Adjust the
+spacing and inspect the native render for corner shape, doubled joins, and
+accidental closures. After editing, repeat the endpoint audit on the remaining
+paths. Account for nearby pairs as joined continuations or intentional breaks,
+branches, occlusions, or distinct marks; the number of completed merges alone is
+not evidence that the region is finished.
 
 Keep intentional gaps, separate marks, branches, occluded sections, and style
 changes separate. This contour rule does not combine semantically distinct diagram
