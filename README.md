@@ -76,6 +76,7 @@ The script does not overwrite, retry, delete, or run a trusted EA script. Openin
 | Requests, revisions, pagination, persistence, and recovery | [Native workflow](docs/native-cli-workflow.md), `scripts/native.mjs` |
 | Image inventory, mixed previews, labels, and output budgets | [Image previews](docs/image-previews.md) |
 | Text placement, bounds, validation, and layering | [Authoring](docs/authoring.md), `scripts/layout.mjs`, `scripts/validate.mjs` |
+| Editable mind maps, MindMap Builder API, installation, and startup | [MindMap Builder](docs/mindmap-builder.md) |
 | Public symbols, structured library inspection, and provenance | [Library reuse](docs/library-reuse.md), `examples/inspect-library.mjs` |
 | Repository development and live acceptance | [Contributing](CONTRIBUTING.md) |
 

@@ -1,5 +1,8 @@
 # Text, shapes, and layout
 
+For editable mind maps, use [MindMap Builder](mindmap-builder.md): install the
+script when missing, start it, and discover its native node/branch/layout API.
+
 Use [native Lucide icons](lucide-icons.md) for installed editable symbols. Choose
 nominal viewport size and initial line width explicitly, retain returned group
 members, and inspect their actual painted bounds before connecting nearby shapes.

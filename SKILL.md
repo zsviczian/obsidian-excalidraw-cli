@@ -1,6 +1,6 @@
 ---
 name: obsidian-excalidraw-cli
-description: Discover, create, inspect, edit, and export editable Obsidian Excalidraw drawings through the running app's native CLI. Use for local vault drawing tasks, revision-safe changes, and visual verification.
+description: Discover, create, inspect, edit, and export editable Obsidian Excalidraw drawings through the running app's native CLI, including MindMap Builder installation and automation. Use for local vault drawing tasks, revision-safe changes, and visual verification.
 ---
 
 # Obsidian Excalidraw through the native CLI
@@ -44,6 +44,7 @@ For a first authorized test, inspect the offline plan from `examples/first-drawi
 - Advanced work: inspect the installed EA/Lib references first. Use `script` only for reviewed local code the user authorizes, with `trusted=true`. Pass JSON arguments as `utils.input`; never interpolate untrusted text into source.
 - Editable SVGs and icons: read [SVG import](docs/svg-import.md) for the workbench-only `importSVG` contract, explicit grouping/insertion, and fidelity limits. Use the installed converter through a trusted script; discover its API before use.
 - Lucide icons: read [native icon insertion](docs/lucide-icons.md). Discover installed names with `icons`; use `create.icons` or `apply` with `op: "lucide"`. Ordinary insertion needs no trusted script. Read every returned `groupMap` member ID; icon aliases are not single elements or binding targets.
+- Editable mind maps: read [MindMap Builder](docs/mindmap-builder.md) for its API, installation when missing into the configured Scripts folder's `Downloaded` subfolder, and startup through its registered script command. Use this workflow for native nodes, branches, folding, and layout. Start the persistent Builder through `command`, then use reviewed one-shot `:script` wrappers for API calls.
 - Mermaid diagrams: read [native diagrams versus SVG images](docs/mermaid.md) before promising editable nodes or labels. Other diagram kinds may render as an SVG image; SVG-to-native conversion is a separate, lossy geometry operation.
 
 ## Preserve meaning and editability

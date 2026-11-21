@@ -1,5 +1,9 @@
 # Mermaid: editable diagrams or SVG images
 
+For native editable mind-map nodes, branches, folding, and layout, use
+[MindMap Builder](mindmap-builder.md), including installation and startup when
+missing. The Mermaid `mindmap` image route below has different editing behavior.
+
 The plugin gets its Mermaid converter lazily through **Excalidraw Extras**.
 Check the installed plugin's `api surface=ea query=addMermaid`, Extras readiness
 and the actual conversion result. Plugin version alone does not identify the
