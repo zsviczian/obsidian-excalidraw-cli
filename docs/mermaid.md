@@ -10,16 +10,37 @@ and the actual conversion result. Plugin version alone does not identify the
 installed converter. Use the normal authorized trusted-script workflow when
 calling EA; Mermaid source is data, not executable instructions.
 
-The source inspected on 2026-10-31 uses mermaid-to-excalidraw 3.1/Pele:
+The 2.29.3 native-CLI feedback reports successful conversion with Mermaid
+component **3.6.0**. The plugin source inspected on 2026-11-22 requires that exact
+component version; Extras' plugin version and Mermaid component version are
+different values. Check the installed contract, not just the plugin version.
+When `status.data.extras` is available, inspect
+`components.mermaid.version`, `active`, `compatible`, `requiredVersion`, and
+`exact`. General `status.data.ready: true` means plugin startup is ready, not
+that every optional Extras feature is compatible or enabled.
+
+On older releases without these fields, verify the installed Extras component
+version and enabled feature in its settings before conversion. An incompatible
+component can open an **Extras Update Required** modal from `addMermaid`, leaving
+the CLI call waiting for human input. Inspect pending dialogs and receipts before
+another write; do not automatically retry a stalled script. [Plugin PR #3065](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3065)
+adds the CLI dependency preflight and component readiness reporting;
+until that change ships, do not assume a newer source checkout fixes the user's
+installed release.
+
+The 3.6.0 converter documentation lists the native families below. The additional
+flowchart details are contributor-reported; inspect the actual output:
 
 | Diagram family | Normal output |
 | --- | --- |
 | Flowchart (`flowchart` / `graph`), including the tested `swimlane-beta` flowchart form | Native shapes, editable labels and connectors |
+| Flowchart subgraphs, `classDef` fills, and reported label line breaks (`\n`) with 3.6.0 | Native editable conversion reported on 2.29.3; inspect actual frames, fills, labels and line wrapping |
 | Sequence (`sequenceDiagram`) | Native elements |
 | Class (`classDiagram`) | Native elements |
 | Entity relationship (`erDiagram`) | Native elements |
 | State (`stateDiagram-v2`) | Native elements |
-| Other supported kinds, including pie, mindmap, Gantt, journey, timeline, Git graph and quadrant chart | An SVG-backed **image element**, retaining Mermaid source for editing |
+| Gantt, quadrant charts, and timelines with 3.6.0 | Native editable elements |
+| Other supported kinds, including pie, mindmap, journey, and Git graph | An SVG-backed **image element**, retaining Mermaid source for editing |
 
 This is not a promise that every Mermaid syntax or theme converts to native
 elements. The converter can fall back to an SVG image when a normally native
@@ -53,8 +74,8 @@ matters more than editing geometry, and compare an export before replacing it.
 Native stroke widths do not automatically scale like an SVG image's visible
 strokes. See [Lucide scaling](lucide-icons.md) for the same distinction.
 
-A focused Windows Obsidian test on 2026-10-31 converted the SVG geometry of all
-seven image families listed above through the real Extras → EA pipeline.
+Before the converter update, a focused Windows Obsidian test on 2026-10-31 converted the SVG geometry of
+pie, mindmap, Gantt, journey, timeline, Git graph and quadrant images through the real Extras → EA pipeline.
 These were small fixtures, not a claim that arbitrary diagrams preserve all
 features. The initial paint test verified geometry, rendered fallback colors
 and save/reopen. The [subsequent text-import check](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/ae661c0ee8fa64df584864c3cc7af3df426e486f/docs/SVG_TEXT_VALIDATION.md)
@@ -68,3 +89,7 @@ and the fork's [real-Extras diagram validation](https://github.com/zsviczian/exc
 The [paint-fix native evidence](https://github.com/zsviczian/obsidian-excalidraw-plugin/blob/7820f0c1378756a65752a99966a351bdd31c581f/docs/testing-evidence/svg-paint/results.json)
 records the separate SVG-to-geometry checks.
 These are source/test checkpoints, not installed-release guarantees.
+Current component evidence: the [Extras README](https://github.com/zsviczian/obsidian-excalidraw-extras#readme)
+and its [pinned converter dependency](https://github.com/zsviczian/obsidian-excalidraw-extras/blob/master/package.json).
+The installed converter 3.6.0 README was also inspected for its native family list;
+this documentation update does not claim a new rendering test.

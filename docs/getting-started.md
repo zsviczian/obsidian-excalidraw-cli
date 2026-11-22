@@ -104,6 +104,15 @@ If no completed receipt is available, inspect both saved and relevant live state
 
 ## Source provenance and boundaries
 
+Selection handoff, drawing-image insertion, filled/dense contours, and EA stroke
+conversion/joining guidance was reviewed on **2026-11-22** against
+[plugin commit e33df841](https://github.com/zsviczian/obsidian-excalidraw-plugin/tree/e33df8410a8f17e20f245433fda1e8f4c5bf617d)
+in [draft PR #3066](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3066)
+(`cliSelection.ts`, `cliApply.ts`, `cliElements.ts`, `cliSchema.ts`, and the EA
+stroke helpers). This is proposed functionality, not a released-version claim;
+require the installed schema/API. Optional Extras versions and Builder readiness
+are separate [draft PR #3065](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3065).
+
 Mermaid output types, native-versus-SVG stroke scaling and SVG paint fallback
 guidance were reviewed on **2026-10-31**. See [Mermaid](mermaid.md),
 [Lucide icons](lucide-icons.md) and [SVG import](svg-import.md). The paint fallback
