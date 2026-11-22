@@ -1,6 +1,6 @@
 ---
 name: obsidian-excalidraw-cli
-description: Discover, create, inspect, edit, and export editable Obsidian Excalidraw drawings through the running app's native CLI, including MindMap Builder installation and automation. Use for local vault drawing tasks, revision-safe changes, and visual verification.
+description: Discover, create, inspect, edit, and export editable Obsidian Excalidraw drawings through the running app's native CLI, including MindMap Builder installation/automation and custom scripts developed from ea-script-template. Use for local vault drawing tasks, revision-safe changes, and visual verification.
 ---
 
 # Obsidian Excalidraw through the native CLI

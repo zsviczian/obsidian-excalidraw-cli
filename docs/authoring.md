@@ -209,7 +209,7 @@ const results = ids.map(id => ea.convertLineToFreedraw(id, {
   tolerance: 0.25,
   maxPoints: 10000,
 }));
-if (!await ea.addElementsToView(false, true)) throw new Error("Publication failed");
+if (!await ea.addElementsToView(false, false)) throw new Error("Publication failed");
 await ea.targetView.save(false);
 return { results };
 ```

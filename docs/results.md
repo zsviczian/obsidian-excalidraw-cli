@@ -44,7 +44,11 @@ functions, or live view objects. Check nested API success/validation results too
 Do not rerun an uncertain import: recover its receipt and inspect live/disk state.
 
 For ordinary CLI script saves, prefer **`await view.save(false)`**, then read back
-disk content. It uses the normal save queue and retains the same-file Markdown
+disk content. When publishing an EA workbench and saving separately, use
+`await ea.addElementsToView(false, false)` first: this publishes and marks the
+view dirty, then the explicit save persists it. Do not treat the convenience
+publication method's returned boolean as a persistence acknowledgment.
+The normal save queue retains the same-file Markdown
 edit guard. `false` controls suppression of reload from the view's own write; it
 is not a force flag. **`await view.forceSave(true, true)`** uses a different policy:
 silent mode, a bounded wait when busy, forced persistence, and bypass of the
