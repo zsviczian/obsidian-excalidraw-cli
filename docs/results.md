@@ -25,3 +25,37 @@ Those child-process tests use controlled local fixtures. They are not native int
 ## Upstream proposals
 
 See [capability report](capabilities.md#candidate-upstream-work-approval-and-live-verification-required). The likely useful candidates are selected library insertion with identity/binding/group preservation, explicit layer reordering if supported EA cannot satisfy it, and runtime font-name/ID plus bounded-text discovery if absent. None was implemented upstream.
+
+## Script results and save policy
+
+Feedback from an external native-CLI run on Excalidraw 2.29.3 reports that Builder
+installation/startup and Mermaid conversion worked end to end after updating
+Extras' Mermaid component to 3.6.0. This is contributor-reported evidence, not
+a live run performed for this bundle.
+
+Trusted scripts must return finite JSON. A top-level `undefined` is normalized
+to `null` by the inspected plugin, but **nested** undefined object properties or
+array entries fail strict result validation. The script may already have changed
+and saved the drawing before the receipt reports `OUTCOME_UNKNOWN`. Prefer an
+explicit JSON result object, or use `return JSON.parse(JSON.stringify(result))`
+for a plain API result: undefined object fields disappear and undefined array
+entries become null. This is not a serializer for circular objects, BigInt,
+functions, or live view objects. Check nested API success/validation results too.
+Do not rerun an uncertain import: recover its receipt and inspect live/disk state.
+
+For ordinary CLI script saves, prefer **`await view.save(false)`**, then read back
+disk content. When publishing an EA workbench and saving separately, use
+`await ea.addElementsToView(false, false)` first: this publishes and marks the
+view dirty, then the explicit save persists it. Do not treat the convenience
+publication method's returned boolean as a persistence acknowledgment.
+The normal save queue retains the same-file Markdown
+edit guard. `false` controls suppression of reload from the view's own write; it
+is not a force flag. **`await view.forceSave(true, true)`** uses a different policy:
+silent mode, a bounded wait when busy, forced persistence, and bypass of the
+same-file edit guard, with additional refresh/embed behavior. It can return
+without saving and is not a stronger persistence acknowledgment. Use it only
+when that policy is deliberately required, rather than as the default CLI save.
+Both methods return void; neither proves that the requested revision was saved.
+Prefer native guarded `apply` for ordinary supported edits; its receipt reports
+persistence. With arbitrary scripts, await operations, check live/disk read-back,
+and inspect/reopen the saved drawing before claiming durable success.

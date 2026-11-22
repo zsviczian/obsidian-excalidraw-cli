@@ -74,9 +74,11 @@ The script does not overwrite, retry, delete, or run a trusted EA script. Openin
 | First-time setup, path types, command discovery, and source provenance | [Getting started](docs/getting-started.md) |
 | Agent operating rules | [SKILL.md](SKILL.md) |
 | Requests, revisions, pagination, persistence, and recovery | [Native workflow](docs/native-cli-workflow.md), `scripts/native.mjs` |
+| Copy selected canvas targets and update their exact element/label IDs | [Selection handoff](docs/targeted-edits.md) |
 | Image inventory, mixed previews, labels, and output budgets | [Image previews](docs/image-previews.md) |
 | Text placement, bounds, validation, and layering | [Authoring](docs/authoring.md), `scripts/layout.mjs`, `scripts/validate.mjs` |
 | Editable mind maps, MindMap Builder API, installation, and startup | [MindMap Builder](docs/mindmap-builder.md) |
+| Custom scripts built in a user-owned repository from the official template | [Custom script development](docs/custom-scripts.md) |
 | Public symbols, structured library inspection, and provenance | [Library reuse](docs/library-reuse.md), `examples/inspect-library.mjs` |
 | Repository development and live acceptance | [Contributing](CONTRIBUTING.md) |
 

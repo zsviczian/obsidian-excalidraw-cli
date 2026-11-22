@@ -20,6 +20,7 @@ Query the installed script schema and Obsidian command registry:
 
 ```sh
 obsidian vault="My vault" obsidian-excalidraw-plugin:schema action=script
+obsidian vault="My vault" obsidian-excalidraw-plugin:status
 obsidian vault="My vault" commands filter="obsidian-excalidraw-plugin:"
 ```
 
@@ -28,6 +29,13 @@ prefix. With a default installation it is
 `obsidian-excalidraw-plugin:Downloaded/Mindmap Builder`. A registered command
 means installed, not necessarily running. An absent `window.MindMapBuilderAPI`
 means inactive or unavailable, not proof that the script needs downloading.
+
+When the installed status response includes `mindMapBuilder`, use its `available`
+and `ready` booleans for a read-only readiness check without a trusted probe.
+These fields describe the active script API, not installation or the correct
+drawing target. Older plugin releases omit them; only then use the probe below.
+They are proposed in [plugin PR #3065](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3065);
+check the actual response rather than assuming an installed release includes them.
 
 Resolve **Excalidraw Automate script folder (CASE SeNSitiVE!)** in the selected
 vault's Excalidraw settings. Its setting key is `scriptFolderPath`, defaulting
@@ -142,7 +150,7 @@ such as `{"markdown":"- Project\n  - Research\n  - Delivery"}`:
 const mmb = window.MindMapBuilderAPI;
 if (!mmb?.ready()) throw new Error("MindMap Builder is not ready");
 const view = ea.targetView;
-if (!view?.file || typeof view.forceSave !== "function") {
+if (!view?.file || typeof view.save !== "function") {
   throw new Error("An explicit target with an awaited save method is required");
 }
 const bound = mmb.setView(view);
@@ -151,14 +159,16 @@ if (bound.data.filePath !== view.file.path) {
   throw new Error("MindMap Builder target does not match the CLI drawing");
 }
 const checked = mmb.validate("importMarkdown", utils.input);
-if (!checked.ok || !checked.data.valid) return checked;
+if (!checked.ok || !checked.data.valid) return JSON.parse(JSON.stringify(checked));
 const result = await mmb.importMarkdown(checked.data.normalizedArgs);
-if (!result.ok) return result;
-await view.forceSave(true, true);
-return result;
+if (!result.ok) return JSON.parse(JSON.stringify(result));
+await view.save(false);
+return JSON.parse(JSON.stringify(result));
 ```
 
-Confirm the installed view's awaited save method before using it. Supply an explicit `parentId` from
+Use the ordinary queued save policy and return JSON-safe data; see
+[result serialization and save policies](results.md#script-results-and-save-policy).
+Supply an explicit `parentId` from
 the actual scene when appending to a branch; otherwise inspect/clear the current
 node selection deliberately before importing a new map. Selection can influence
 the destination. Useful follow-up APIs include `addNode`, `refreshMapLayout`,
