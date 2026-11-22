@@ -88,8 +88,11 @@ Require the installed schema/API before using them.
 
 Inspect `schema action=create` and `schema action=apply` before using new fields.
 When advertised, a `line` skeleton or an existing line's `update.set` can specify
-boolean **`polygon`**. Use `polygon: true` with a background color to fill a
-closed contour; `false` restores open-line behavior. It is rejected on arrows,
+boolean **`polygon`**. True requires an explicitly closed contour of at least
+four points, with the last equal to the first; the CLI does not reshape it.
+Set its background color for fill. False retains regular line semantics: a
+closed path can still fill, so use a transparent background to remove fill.
+It is rejected on arrows,
 shapes and other element types. Do not set `strokeLinecap` on ordinary lines.
 
 The updated skeleton schema permits 2–1000 points per line/arrow, with at most

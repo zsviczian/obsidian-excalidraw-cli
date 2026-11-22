@@ -106,7 +106,7 @@ If no completed receipt is available, inspect both saved and relevant live state
 
 Selection handoff, drawing-image insertion, filled/dense contours, and EA stroke
 conversion/joining guidance was reviewed on **2026-11-22** against
-[plugin commit e33df841](https://github.com/zsviczian/obsidian-excalidraw-plugin/tree/e33df8410a8f17e20f245433fda1e8f4c5bf617d)
+[plugin commit 30ac87ce](https://github.com/zsviczian/obsidian-excalidraw-plugin/tree/30ac87ceda44eb2bbdacb6c2026581a942ff16b8)
 in [draft PR #3066](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3066)
 (`cliSelection.ts`, `cliApply.ts`, `cliElements.ts`, `cliSchema.ts`, and the EA
 stroke helpers). This is proposed functionality, not a released-version claim;
