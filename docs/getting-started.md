@@ -107,11 +107,11 @@ If no completed receipt is available, inspect both saved and relevant live state
 Selection handoff, drawing-image insertion, filled/dense contours, and EA stroke
 conversion/joining guidance was reviewed on **2026-11-22** against
 [plugin commit 3318f216](https://github.com/zsviczian/obsidian-excalidraw-plugin/tree/3318f21699a108f4e2e0490fce033c2ea2c2858f)
-in [draft PR #3066](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3066)
+in [merged PR #3066](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3066)
 (`cliSelection.ts`, `cliApply.ts`, `cliElements.ts`, `cliSchema.ts`, and the EA
-stroke helpers). This is proposed functionality, not a released-version claim;
-require the installed schema/API. Optional Extras versions and Builder readiness
-are separate [draft PR #3065](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3065).
+stroke helpers). Confirm availability using the installed schema/API. Optional
+Extras versions and Builder readiness were merged separately in
+[PR #3065](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3065).
 
 Mermaid output types, native-versus-SVG stroke scaling and SVG paint fallback
 guidance were reviewed on **2026-10-31**. See [Mermaid](mermaid.md),

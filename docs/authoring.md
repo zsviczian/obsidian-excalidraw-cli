@@ -82,7 +82,7 @@ connectors merely because their endpoints are nearby.
 
 ## Filled line contours
 
-The contour, drawing-image and EA stroke extensions below are proposed in
+The contour, drawing-image and EA stroke extensions below were merged in
 [plugin PR #3066](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3066).
 Require the installed schema/API before using them.
 

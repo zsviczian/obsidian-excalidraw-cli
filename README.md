@@ -8,6 +8,16 @@ Agent → local terminal → Obsidian CLI → Excalidraw plugin → editable vau
 
 It is not another Excalidraw CLI, renderer, cloud service, or scene serializer. The installed plugin owns drawing construction, revision checks, persistence, and exports.
 
+## Install the agent skill
+
+Run this in the project where you use your agent and select the agent when prompted.
+
+```sh
+npx skills add zsviczian/obsidian-excalidraw-cli --skill obsidian-excalidraw-cli
+```
+
+The bundle includes [MindMap Builder](docs/mindmap-builder.md) and [custom script development](docs/custom-scripts.md). On a later visit, use `npx skills update obsidian-excalidraw-cli` to pick up changes. See the [skills CLI reference](https://www.skills.sh/docs/cli) for installation scopes and agent options. The skill uses your running Obsidian app and its installed Excalidraw plugin. See the requirements below.
+
 ## Give it to an agent
 
 Provide a local checkout or a copy of the repository, then use this handoff, replacing the placeholders:
@@ -23,7 +33,7 @@ Start with read-only discovery. Stay within the task's authorized changes.
 Verify saved state and inspect the exported image; report what remains unverified.
 ```
 
-For an agent that supports `SKILL.md` bundles, place a copy in its documented skill location **with the repository's relative structure intact**, including `docs/`, `scripts/`, `examples/`, `README.md`, and `LICENSE`. Keep `package.json` and `tests/` for offline checks. Do not copy only SKILL.md, `.git`, or any private generated state. Installation is manual; nothing changes global agent settings. Scripts resolve imports relative to their files, not the current working directory.
+For manual installation, copy the bundle to your agent's documented skill location with `SKILL.md`, `docs/`, `scripts/`, `examples/`, `README.md`, and `LICENSE` in their original relative locations. Keep `package.json` and `tests/` for offline checks. Omit `.git` and private generated state. Scripts resolve imports relative to their files, not the current working directory.
 
 ## Requirements
 

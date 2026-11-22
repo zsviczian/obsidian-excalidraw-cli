@@ -34,8 +34,8 @@ When the installed status response includes `mindMapBuilder`, use its `available
 and `ready` booleans for a read-only readiness check without a trusted probe.
 These fields describe the active script API, not installation or the correct
 drawing target. Older plugin releases omit them; only then use the probe below.
-They are proposed in [plugin PR #3065](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3065);
-check the actual response rather than assuming an installed release includes them.
+They were merged in [plugin PR #3065](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3065).
+Check the actual response to confirm your installed release includes them.
 
 Resolve **Excalidraw Automate script folder (CASE SeNSitiVE!)** in the selected
 vault's Excalidraw settings. Its setting key is `scriptFolderPath`, defaulting

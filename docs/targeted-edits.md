@@ -1,6 +1,6 @@
 # Hand selected canvas targets to an agent
 
-This workflow is proposed in [plugin PR #3066](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3066).
+This workflow was merged in [plugin PR #3066](https://github.com/zsviczian/obsidian-excalidraw-plugin/pull/3066).
 Check the installed commands/schema before using it.
 
 The **Copy selected elements for agent** Excalidraw command captures a JSON
